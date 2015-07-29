@@ -1,0 +1,1 @@
+cat Success Fail_Mismatch | sed -e 's/^.*times:\([^ ]*   smt:[^ ]*\)\( .*\)\?$/\1/ ; s/  smt:// ; s/s//g ; s/[+, ]/,/g' > times.csv

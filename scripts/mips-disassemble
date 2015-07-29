@@ -1,0 +1,6 @@
+#!/bin/bash
+
+FILE="`mktemp`"
+printf "$1" > "$FILE"
+mips-linux-gnu-objdump -b binary -m mips -D "$FILE" | grep " 0:"
+rm "$FILE"

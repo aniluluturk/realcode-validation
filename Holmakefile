@@ -1,0 +1,62 @@
+# You also need to change the target symlink
+TARGET=M0
+
+ifeq "$(TARGET)" "M0"
+TARGET_INCLUDES = \
+           $(HOLDIR)/examples/l3-machine-code/m0/model \
+           $(HOLDIR)/examples/l3-machine-code/m0/step \
+           $(HOLDIR)/examples/l3-machine-code/m0/prog \
+           $(HOLDIR)/examples/l3-machine-code/m0/decompiler
+
+TARGET_BARE_THYS = \
+           $(HOLDIR)/examples/l3-machine-code/m0/prog/m0_progLib \
+           $(HOLDIR)/examples/l3-machine-code/m0/decompiler/m0_decompLib
+
+TARGET_BASE_HEAP = \
+           $(HOLDIR)/examples/l3-machine-code/m0/decompiler/local-hol-heap
+else ifeq "$(TARGET)" "MIPS"
+TARGET_INCLUDES = \
+           $(HOLDIR)/examples/l3-machine-code/mips/model \
+           $(HOLDIR)/examples/l3-machine-code/mips/step \
+           $(HOLDIR)/examples/l3-machine-code/mips/prog \
+           $(HOLDIR)/examples/l3-machine-code/lib
+
+TARGET_BARE_THYS = \
+           $(HOLDIR)/examples/l3-machine-code/mips/prog/mips_progLib
+
+TARGET_BASE_HEAP = \
+           $(HOLDIR)/examples/l3-machine-code/mips/prog/mips-step-heap
+endif
+
+INCLUDES = \
+           $(HOLDIR)/examples/machine-code/decompiler \
+           $(HOLDIR)/examples/machine-code/hoare-triple \
+           $(HOLDIR)/examples/l3-machine-code/common \
+           $(TARGET_INCLUDES)
+OPTIONS=QUIT_ON_FAILURE
+
+THYFILES = $(patsubst %Script.sml,%Theory.uo,$(wildcard *.sml))
+TARGETS = $(patsubst %.sml,%.uo,$(THYFILES)) testgen
+
+all: $(TARGETS)
+.PHONY: all
+
+testgen: testgen.uo
+	$(HOLMOSMLC) -o $@ $<
+
+ifdef POLY
+HOLHEAP = local-hol-heap
+EXTRA_CLEANS = testgen $(HOLHEAP) $(HOLHEAP).o
+
+BARE_THYS = $(TARGET_BARE_THYS)
+
+DEPS = $(patsubst %,%.uo,$(BARE_THYS))
+
+$(HOLHEAP): $(DEPS)
+	$(protect $(HOLDIR)/bin/buildheap) -o $(HOLHEAP) -b $(TARGET_BASE_HEAP) $(BARE_THYS)
+
+all: $(HOLHEAP)
+
+else
+EXTRA_CLEANS = testgen
+endif

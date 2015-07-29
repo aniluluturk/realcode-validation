@@ -1,0 +1,12 @@
+#!/bin/sh
+
+set -e
+
+SIMREGS="`mktemp`"
+echo 'Post-state registers:' > "$SIMREGS"
+l3mips --cycles 20000 --uart-delay 0 --ignore HI --ignore LO   --format raw "$1" \
+ | tail -n +4 | head -n -2 >> "$SIMREGS"
+diff -us -- "$SIMREGS" "$2"
+RESULT=$!
+rm -- "$SIMREGS"
+exit $RESULT
