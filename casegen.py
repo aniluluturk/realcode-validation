@@ -30,6 +30,15 @@ print("l: " + lines + " n: " + number)
 f = open("log.txt")
 lines = f.readlines()
 
+dic = {}
+for l1 in lines:
+	l = l1.split()
+	if(l[2] in dic):
+		dic[l[2]] = dic[l[2]] +1
+	else:
+		dic[l[2]] = 1
+print dic
+
 length = len(lines)
 num_case = length/float(seq_length)/2
 if(number != ''):
@@ -55,6 +64,14 @@ time.sleep(0.2)
 i =0
 for ci in range(len(cases)):
 	out = open("tcs" + str(ci) + ".txt","w")
+	dic = {}
+	for l1 in cases[ci]:
+		l = l1.split()
+		if(l[2] in dic):
+			dic[l[2]] = dic[l[2]] +1
+		else:
+			dic[l[2]] = 1
+	print dic
 	out.write("".join(cases[ci]))
 	out.close()
 	print("written case " + str(ci)) 
