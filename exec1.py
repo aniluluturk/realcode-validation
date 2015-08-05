@@ -22,35 +22,39 @@ def singlestep_l(num_lines):
 	d = tn.read_very_eager()
 	print('**' +d)
 	while i< num_lines:
-		tn.write('step\n')
-        	sleep(0.5)
-        	d = tn.read_very_eager()
-        	print('--'+d)
-		tn.write('reg pc\n')
-        	sleep(0.2)
-        	a = tn.read_very_eager()
-        	#a =a.replace('\r\n','')
-        	#b = a.split(':')
-        	#print(b)
-        	#r = b[1].strip()
-        	print(a)
-        	k =re.findall(r'0x[0-9A-F]+',a,re.I)
-        	print(k)
-        	r = k[0]
-        	#print('here is :' + 'reg ' + r + '\n')	
-        	tn.write('arm disassemble ' + r + '\n')
-        	sleep(0.2)
-        	a = tn.read_very_eager()
+		try:
+			tn.write('step\n')
+        		sleep(0.5)
+	        	d = tn.read_very_eager()
+        		print('--'+d)
+			tn.write('reg pc\n')
+        		sleep(0.2)
+        		a = tn.read_very_eager()
+        		#a =a.replace('\r\n','')
+        		#b = a.split(':')
+        		#print(b)
+        		#r = b[1].strip()
+        		print(a)
+        		k =re.findall(r'0x[0-9A-F]+',a,re.I)
+        		print(k)
+        		r = k[0]
+        		#print('here is :' + 'reg ' + r + '\n')	
+        		tn.write('arm disassemble ' + r + '\n')
+        		sleep(0.2)
+        		a = tn.read_very_eager()
+			
+			#get the second line of the output
+			a = a.split('\n')[1]
 		
-		#get the second line of the output
-		a = a.split('\n')[1]
-	
-        	print("res:"+a)
-        	f.write('res'+a+'\n')
-        	i = i+1
-		print("num_instructions: " + str(i))
-	
-	
+        		print("res:"+a)
+        		f.write(a+'\n')
+        		i = i+1
+			print("num_instructions: " + str(i))
+		except Exception,e:
+			print("***Read error on instruction no: " + str(i))
+			print(str(e))
+		
+		
 	tn.write('exit\n')
 	print(tn.read_all())
 	f.close()
@@ -81,7 +85,7 @@ def singlestep_t(total_time):
         	d = tn.read_very_eager()
         	print('--'+d)
 		tn.write('reg pc\n')
-        	sleep(0.1)
+        	sleep(0.2)
         	a = tn.read_very_eager()
         	#a =a.replace('\r\n','')
         	#b = a.split(':')
@@ -151,6 +155,19 @@ def main():
 		singlestep_t(int(time))
 	else:
 		print("Please supply argument for time or line")
+		return
+
+	f = open("log.txt")
+	lines = f.readlines()
+	
+	dic = {}
+	for l1 in lines:
+		l = l1.split()
+		if(l[2] in dic):
+			dic[l[2]] = dic[l[2]] +1
+		else:
+			dic[l[2]] = 1
+	print dic
 
 
 if __name__ == "__main__":

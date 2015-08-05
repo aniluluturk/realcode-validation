@@ -46,7 +46,7 @@ def singlestep_l(num_lines):
 		a = a.split('\n')[1]
 	
         	print("res:"+a)
-        	f.write('res'+a+'\n')
+        	f.write(a+'\n')
         	i = i+1
 		print("num_instructions: " + str(i))
 	

@@ -10,17 +10,27 @@ def singlestep_l(bp_loc,num_lines):
 
 	port = '4444'
 	host = 'localhost'
-	f = open('log.txt','wb')
+	f = open('log' + str(bp_loc) + '.txt','wb')
 
 	tn = telnetlib.Telnet(host,port)
 	tn.write('halt\n')
 	sleep(0.3)
 	d = tn.read_very_eager()
-	tn.write('reg pc ' + bp_loc + '\n')
 	i = 0
-	sleep(0.1)
-	d = tn.read_very_eager()
-	print('**' +d)
+	if(bp_loc != 'reset'):
+		tn.write('bp ' + bp_loc + ' 2 hw\n')
+		sleep(0.2)
+		d = tn.read_very_eager()
+		print('**' +d)
+	#tn = telnetlib.Telnet(host,port)
+	if(bp_loc != 'reset'):
+		tn.write('reset run\n')
+		sleep(5)
+		d = tn.read_very_eager()  #we need to check whether we stopped at a breakpoint here
+	else:
+		tn.write('reset halt\n')
+		sleep(5)
+		d = tn.read_very_eager()  
 	while i< num_lines:
 		tn.write('step\n')
         	sleep(0.5)
@@ -46,11 +56,12 @@ def singlestep_l(bp_loc,num_lines):
 		a = a.split('\n')[1]
 	
         	print("res:"+a)
-        	f.write('res'+a+'\n')
+        	f.write(a+'\n')
         	i = i+1
 		print("num_instructions: " + str(i))
 	
-	
+	tn.write('rbp ' + bp_loc + '\n')	
+
 	tn.write('exit\n')
 	print(tn.read_all())
 	f.close()
@@ -136,11 +147,12 @@ def main():
 		br_list.append(br.split())
 		print(br + "\n")
 	print br_list
-	return
+	#return
 
 	for br in br_list:
-		singlestep_l(br[0],br[1])
+		singlestep_l(br[0],int(br[1]))
 
+	return
 
 	try:
 		myopts, args = getopt.getopt(sys.argv[1:],"l:t:")
