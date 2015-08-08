@@ -6,11 +6,11 @@ import datetime
 
 
 
-def singlestep_l(num_lines):
+def singlestep_l(num_lines,logfile = 'log.txt'):
 
 	port = '4444'
 	host = 'localhost'
-	f = open('log.txt','wb')
+	f = open(logfile,'wb')
 
 	tn = telnetlib.Telnet(host,port)
 	tn.write('halt\n')
@@ -123,6 +123,7 @@ def singlestep_t(total_time):
 def main():
 	time=''
 	lines=''
+	logfile = 'log.txt'
 	
 	'''
 	time1 = datetime.datetime.now() 
@@ -134,7 +135,7 @@ def main():
 	'''
 
 	try:
-		myopts, args = getopt.getopt(sys.argv[1:],"l:t:")
+		myopts, args = getopt.getopt(sys.argv[1:],"f:l:t")
 	except getopt.GetoptError as e:
     		print (str(e))
     		print("Usage: %s [-l number_lines] [-t total_runtime]" % sys.argv[0])
@@ -145,19 +146,22 @@ def main():
 			lines=a
 		elif o == '-t':
 			time=a
+		elif o == '-f':
+			print("LOGFILE: " + logfile + "," + a + ",")
+			logfile=a
 
-	print("l: " + lines + " t: " + time) 
+	print("l: " + lines + " t: " + time + " f: " + logfile) 
 
 	#sys.exit()
 	if(lines !=""):
-		singlestep_l(int(lines))
+		singlestep_l(int(lines),logfile)
 	elif(time !=""):
 		singlestep_t(int(time))
 	else:
 		print("Please supply argument for time or line")
 		return
 
-	f = open("log.txt")
+	f = open(logfile)
 	lines = f.readlines()
 	
 	dic = {}

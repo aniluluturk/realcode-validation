@@ -7,9 +7,10 @@ import time
 
 number=''
 lines=''
+logfile = 'log.txt'
 
 try:
-	myopts, args = getopt.getopt(sys.argv[1:],"l:n:")
+	myopts, args = getopt.getopt(sys.argv[1:],"f:l:n:")
 except getopt.GetoptError as e:
 	print (str(e))
     	print("Usage: %s [-l number_instructions] [-t number_testcases]" % sys.argv[0])
@@ -22,12 +23,15 @@ for o, a in myopts:
 		lines=a
 	elif o == '-n':
 		number=a
+	elif o == '-f':
+		logfile=a
+
 if(lines != ''):
 	seq_length = int(lines)
 
 print("l: " + lines + " n: " + number) 
 
-f = open("log.txt")
+f = open(logfile)
 lines = f.readlines()
 
 dic = {}

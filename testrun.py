@@ -147,6 +147,7 @@ def main():
 	
 
 	cases = [f for f in os.listdir('.') if re.match(str(filename)+r'[0-9]*\.txt\Z',f)]
+	cases.sort()
 	num_tests = len(cases)
 	succ_tests = 0
 	fail_tests = 0
