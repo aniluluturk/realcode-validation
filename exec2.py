@@ -22,34 +22,39 @@ def singlestep_l(num_lines):
 	d = tn.read_very_eager()
 	print('**' +d)
 	while i< num_lines:
-		tn.write('step\n')
-        	sleep(0.5)
-        	d = tn.read_very_eager()
-        	print('--'+d)
-		tn.write('reg pc\n')
-        	sleep(0.2)
-        	a = tn.read_very_eager()
-        	#a =a.replace('\r\n','')
-        	#b = a.split(':')
-        	#print(b)
-        	#r = b[1].strip()
-        	print(a)
-        	k =re.findall(r'0x[0-9A-F]+',a,re.I)
-        	print(k)
-        	r = k[0]
-        	#print('here is :' + 'reg ' + r + '\n')	
-        	tn.write('arm disassemble ' + r + '\n')
-        	sleep(0.2)
-        	a = tn.read_very_eager()
-		
-		#get the second line of the output
-		a = a.split('\n')[1]
+		try:
+			tn.write('step\n')
+        		sleep(0.7)
+        		d = tn.read_very_eager()
+        		print('--'+d)
+			tn.write('reg pc\n')
+        		sleep(0.4)
+        		a = tn.read_very_eager()
+        		#a =a.replace('\r\n','')
+        		#b = a.split(':')
+        		#print(b)
+        		#r = b[1].strip()
+        		print(a)
+        		k =re.findall(r'0x[0-9A-F]+',a,re.I)
+        		print(k)
+        		r = k[0]
+        		#print('here is :' + 'reg ' + r + '\n')	
+        		tn.write('arm disassemble ' + r + '\n')
+        		sleep(0.3)
+        		a = tn.read_very_eager()
+			
+			#get the second line of the output
+			a = a.split('\n')[1]
 	
-        	print("res:"+a)
-        	f.write(a+'\n')
-        	i = i+1
-		print("num_instructions: " + str(i))
-	
+        		print("res:"+a)
+        		f.write(a+'\n')
+        		i = i+1
+			print("num_instructions: " + str(i))
+		except KeyboardInterrupt:
+			print("**Error")
+			exit(1)
+		except:
+			print("Error,continue")
 	
 	tn.write('exit\n')
 	print(tn.read_all())
