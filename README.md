@@ -3,7 +3,9 @@
 This repository contains the source files for real code testing project for ARM Cortex-M0. 
 
 -target/Target.sml is currently configured for XMC board, configurations for STM and NXP boards can be done with commenting out the related sections
+
 -after Target changes are made, for generating initialising the environment, call "holmake" in the directory
+
 -finally, you can run HOL4 by running "hol" in the current directory, or you can use automated scripts for testing
 
 -------
