@@ -22,6 +22,12 @@ exec2.py
 -It can be called with arguments "-l length_of_trace" or "-t timespent_on_trace"
 -Resulting log file is named log.txt, although the name of the file can be changed with command line argument "-f filename"
 
+exec3.py [New]
+
+-Usage and outputs are the same as other exec*.py scripts
+-Generates execution traces with branch choices indicated for testrun.py
+
+
 execbp.py
 
 -Should work on any processor with "reset halt" support on openocd
@@ -46,5 +52,7 @@ testrun.py
 -It can direct openocd error log to a different file, if commandline option "-o" is used
 -Results of tests are outputted to log_tcs*.txt" corresponding to the same respective "tcs*.txt" name included as suffix.
 -It also prints number of success and failures after all tests are run in console, after "OVERVIEW" heading.
-
-
+- [New] It can change the current working directory for test cases with "-d" command line option
+-"--nobranch" option prevents it from supplying explicit branch choices to HOL,
+	if not used, branches are provided according to the signs in execution traces/test cases
+-It skips the test runs for the test cases that previously run, and created "log_" prefixed output files
