@@ -173,7 +173,7 @@ def main():
 		br_list.append(br.split())
 		print(br + "\n")
 	print br_list
-	return
+	#return
 
 	for br in br_list:
 		singlestep_l(br[0],int(br[1]))
