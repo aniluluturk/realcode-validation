@@ -1,7 +1,7 @@
 import telnetlib
 import re
 from time import sleep
-import sys, getopt
+import sys, getopt,os
 import datetime
 
 
@@ -142,15 +142,38 @@ def main():
 	print(timediff)
 	print(timediff.total_seconds())
 	'''
+	brfile = "breaks.txt"
+	if(len(sys.argv) >1):
+		brfile = "breaks_loc.txt"
+
+		temp = open("bppos.py")
+		ls = temp.readlines()
+		ls = "".join(ls)
+
+		#print ls
+		ls = ls.replace("SOMEFILE",sys.argv[1])
+		print ls
+		tempout = open("bppos1.py","w")
+		tempout.write(ls)
+		tempout.close()
+
+		#exit(0)
+
+		os.system("gdb -q -x bppos1.py --batch")
+		#sleep(3)
+		#ch = open("breaks_loc.txt")
+		#print(ch.readlines())
+		
 
 	br_list = []
-	brfile = open("breaks.txt","r")
+	print(brfile)
+	brfile = open(brfile,"r")
 	breaks = brfile.readlines()
 	for br in breaks:
 		br_list.append(br.split())
 		print(br + "\n")
 	print br_list
-	#return
+	return
 
 	for br in br_list:
 		singlestep_l(br[0],int(br[1]))
