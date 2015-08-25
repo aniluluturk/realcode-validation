@@ -1,5 +1,71 @@
 This document outlines the usage and I/O specifications of scripts provided within the project for automated testing/validation process
 
+---------- INSTALL ---------------------------------------
+
+Requirements - polyml, hol4 (hol), python, openocd
+Python library requirements:  pexpect, gdb, telnetlib  
+
+You only need to run holmake for setting up HOL scripts of Campbell's repository.
+
+
+--------- RUN EXAMPLE TEST CASES ---------------------------
+
+1. First, one should run openocd with necessary config files, specific to that processor
+
+for xmc1100:
+% openocd -f xmc2go.cfg 
+for stm32f0
+% openocd -f stm32f0discovery.cfg
+
+Note: cfg files can be found in openocd's tcl/boards directory
+
+2. One can start running few of the tests by calling testrun.py with explicitly giving directory names to it
+
+% python testrun.py -d testcases/xmc-logeas-5 --nobranch
+
+this will run all the testcases in xmc-logeas
+the results will be generated in the same directoty with prefix log_tcs*
+
+--------- SAMPLE USAGE -----------------------------------
+
+1. since devices are separate for using the python scripts, one needs to load openocd separetely
+
+for xmc1100:
+% openocd -f xmc2go.cfg 
+for stm32f0
+% openocd -f stm32f0discovery.cfg
+
+Note: cfg files can be found in openocd's tcl/boards directory
+
+2. generate execution traces.
+
+for xmc, one can call
+% python exec1.py -l 20
+
+for stm one can call
+% python exec2.py -l 20
+
+this will generate a log.txt file with 20 instructions listed within
+
+3. generate test cases
+
+% python casegen.py -l 5 -n 4
+
+this will generate 4 test cases with maximum (ideally) 5 instructions each.
+the output files will have names tcs0.txt, tcs1.txt ....
+
+4. run the tests
+
+% python testrun.py --nobranch
+
+this will run the tests on HOL4 without supplying any branch choices explicitly. All tests with prefix tcs will be run
+their results will be displayed as an overview afterwards,
+
+to see the results of the run, consult log_tcs*.txt files generated for every tcs*.txt test case.  
+
+
+---------- FILES -----------------------------------------
+
 
 run.sh
 
