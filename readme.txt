@@ -98,7 +98,7 @@ execbp.py
 
 -Should work on any processor with "reset halt" support on openocd
 -Generates execution traces by adding breakpoints and debugging from their halt locations
--List of execution traces and length of these traces are read from "./breakpoints.txt"
+-List of execution traces and length of these traces are read from "./breaks.txt"
 -Accepts "0x......" direct memory locations or "sourcefile:linenumber" type addressing for breakpoint locations
 -If reset vector breakpoints are required, one can use "break" string instead of memory location addressing
 -Outputs are generated in files with name "log[breakpoint_location].txt". 
@@ -122,3 +122,9 @@ testrun.py
 -"--nobranch" option prevents it from supplying explicit branch choices to HOL,
 	if not used, branches are provided according to the signs in execution traces/test cases
 -It skips the test runs for the test cases that previously run, and created "log_" prefixed output files
+
+branchify.py 
+
+- Expects a test case file as an argument. i.e. call with "python branchify.py tcs0.txt" 
+- Generates an instruction file with branch choices explicity provided for testrun.py
+-The new file is saves with fcs prefix e.g., fcs0.txt
