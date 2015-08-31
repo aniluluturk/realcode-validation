@@ -70,6 +70,8 @@ to see the results of the run, consult log_tcs*.txt files generated for every tc
 run.sh
 
 -A simple bash script running exec*.py casegen.py and testrun.py consecutively. 
+-it expects a command line argument for specifying the suffix of exec*.py files
+  e.g.,To work with XMC, use "./run.sh 1", to work with STM, use "./run.sh 2" 
 -It accepts command line arguments to be passed to python file before running the scripts.
 -It is very crude, and in case of a python,openocd or bash related problem, it might fail to work properly.
 	Using python files separately is encouraged.
